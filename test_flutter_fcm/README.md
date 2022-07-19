@@ -1,16 +1,11 @@
 # test_flutter_fcm
 
-A new Flutter project.
+Test Flutter with using Firebase Cloud Messaging Service.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Send from FCM Notification Compose
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+By select iOS/Android device, click `Send Test Message` from [Notification Compose](https://console.firebase.google.com/u/0/project/testflutterfcm-bac2a/notification/compose)
+![](/test_flutter_fcm/readme_img/fcm_notification.png)
+<img src="./readme_img/ios_device.jpeg" alt="drawing" width="300"/>
