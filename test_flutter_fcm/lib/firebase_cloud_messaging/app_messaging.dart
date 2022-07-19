@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class AppMessaging {
   void setup() {
-    _registerToken();
     _requestUserPermission();
+    _registerToken();
+    _handleForegroundMessage();
   }
 
   void _registerToken() async {
@@ -35,5 +36,18 @@ class AppMessaging {
     );
 
     debugPrint('User granted permission: ${settings.authorizationStatus}');
+  }
+
+  void _handleForegroundMessage() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint('Got a message whilst in the foreground!');
+      debugPrint('Message data: ${message.data}');
+
+      // TODO: check message.data if messageType will be data in later
+      if (message.notification != null) {
+        debugPrint(
+            'Message also contained a notification: ${message.notification}');
+      }
+    });
   }
 }
