@@ -1,20 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class AppMessaging {
-  void setup() {
-    _requestUserPermission();
-    _registerToken();
-    _handleForegroundMessage();
+  static final AppMessaging _instance = AppMessaging();
+  static AppMessaging get instance => _instance;
+
+  String? fcmToken;
+  Future<void> setup() async {
+    await _requestUserPermission();
+    fcmToken = await FirebaseMessaging.instance.getToken();
+    _onTokenRefresh();
+    _onListenForegroundMessage();
   }
 
-  void _registerToken() async {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+  void _onTokenRefresh() async {
     FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
       // TODO: If necessary send token to application server.
 
       // Note: This callback is fired at each app startup and whenever a new
       // token is generated.
+      this.fcmToken = fcmToken;
       debugPrint('FCM token update to: $fcmToken');
     }).onError((err) {
       // Error getting token.
@@ -22,10 +28,8 @@ class AppMessaging {
     debugPrint('FCM token is: $fcmToken');
   }
 
-  void _requestUserPermission() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    NotificationSettings settings = await messaging.requestPermission(
+  Future<void> _requestUserPermission() async {
+    final settings = await FirebaseMessaging.instance.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -38,7 +42,7 @@ class AppMessaging {
     debugPrint('User granted permission: ${settings.authorizationStatus}');
   }
 
-  void _handleForegroundMessage() {
+  void _onListenForegroundMessage() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       debugPrint('Got a message whilst in the foreground!');
       debugPrint('Message data: ${message.data}');
